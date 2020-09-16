@@ -4,15 +4,16 @@ app:
   notify: appz@cloudbourne.co
 
 build:
-  version: 2.9
+  version: 3.1
   env: DEV
   build_file: none
   output_files: output/*.zip
-  image_template: elasticsearch-5.6
+  image_template: elasticsearch-6.8
   image_name: myco/log-collector-es
 
 deploy:
   context: myco/DEV
+  type: elasticsearch6
   replicas: 1
   port:
   - 9200
@@ -22,7 +23,11 @@ volumes:
 - claim: elasticsearch-pvc
   mount: /appz/data
   name: data
-
+  size: 1024Gi
+  mode: ReadWriteOnce
+  class: microk8s-hostpath
+  matchLabels: false
+  
 monitor:
   notify: appzops@cloudbourne.co      
 
